@@ -176,6 +176,7 @@ export default function Home() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fullscreenScrollRef = useRef<HTMLDivElement>(null);
   const fullscreenRef = useRef<HTMLDivElement>(null);
@@ -346,6 +347,21 @@ export default function Home() {
       } else if (e.code === "KeyS" && !e.repeat && isFullscreen) {
         e.preventDefault();
         setSidebarOpen(prev => !prev);
+      } else if (e.code === "KeyC" && !e.repeat && isFullscreen) {
+        e.preventDefault();
+        setControlsVisible(prev => !prev);
+      } else if (e.code === "ArrowUp" && !e.repeat) {
+        e.preventDefault();
+        const scrollAmount = 50; // pixels to scroll
+        setScrollPosition(prev => Math.max(0, prev - scrollAmount));
+      } else if (e.code === "ArrowDown" && !e.repeat) {
+        e.preventDefault();
+        const scrollAmount = 50;
+        const currentRef = isFullscreen ? fullscreenScrollRef.current : scrollRef.current;
+        if (currentRef) {
+          const maxScroll = currentRef.scrollHeight - currentRef.clientHeight;
+          setScrollPosition(prev => Math.min(maxScroll, prev + scrollAmount));
+        }
       }
     };
     window.addEventListener("keydown", handleKeyPress);
@@ -391,7 +407,7 @@ export default function Home() {
           </div>
         </div>
         <div className="text-xs text-gray-400 text-center mt-2">
-          Keyboard: Space = Play/Pause | F = Fullscreen | R = Reset | S = Settings (in fullscreen)
+          Keyboard: Space = Play/Pause | F = Fullscreen | R = Reset | S = Settings | C = Controls | ↑↓ = Scroll
         </div>
       </div>
 
@@ -730,8 +746,21 @@ export default function Home() {
           backgroundColor: config.backgroundColor,
         }}
       >
+        {/* Toggle Controls Button (always visible) */}
+        <button
+          onClick={() => setControlsVisible(!controlsVisible)}
+          className="absolute top-2 left-2 z-50 bg-black/60 hover:bg-black/80 text-white px-3 py-2 rounded-lg transition-colors text-sm"
+          title="Toggle controls (C key)"
+        >
+          {controlsVisible ? "▲ Hide" : "▼ Show"}
+        </button>
+
         {/* Fullscreen Controls */}
-        <div className="bg-black/80 p-4 flex items-center justify-center gap-4">
+        <div
+          className={`bg-black/80 p-4 flex items-center justify-center gap-4 transition-transform duration-300 ${
+            controlsVisible ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
           <button
             onClick={togglePlayPause}
             className="bg-[#2a2a2a] hover:bg-[#3a3a3a] px-6 py-2 rounded-lg transition-colors text-white"

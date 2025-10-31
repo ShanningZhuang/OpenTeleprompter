@@ -41,6 +41,9 @@ A professional teleprompter application for speakers, presenters, and video crea
 - **F** - Toggle Fullscreen
 - **R** - Reset scroll position
 - **S** - Toggle Settings Sidebar (in fullscreen mode)
+- **C** - Toggle Control Panel (in fullscreen mode)
+- **↑ Arrow Up** - Scroll up manually
+- **↓ Arrow Down** - Scroll down manually
 
 ## Getting Started
 
