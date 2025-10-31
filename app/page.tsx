@@ -407,12 +407,24 @@ export default function Home() {
         e.preventDefault();
         // Use viewportPadding which represents the actual page/viewport size
         setScrollPosition(prev => Math.max(0, prev - viewportPadding));
+      } else if ((e.metaKey || e.ctrlKey) && !e.repeat && (e.key === "Meta" || e.key === "Control")) {
+        // Command key (Meta) or Control key scroll up
+        e.preventDefault();
+        setScrollPosition(prev => Math.max(0, prev - viewportPadding));
       } else if (e.code === "ArrowDown" && !e.repeat) {
         e.preventDefault();
         const currentRef = isFullscreen ? fullscreenScrollRef.current : scrollRef.current;
         if (currentRef) {
           const maxScroll = currentRef.scrollHeight - currentRef.clientHeight;
           // Use viewportPadding which represents the actual page/viewport size
+          setScrollPosition(prev => Math.min(maxScroll, prev + viewportPadding));
+        }
+      } else if (e.altKey && !e.repeat && e.key === "Alt") {
+        // Option key (Alt) scrolls down
+        e.preventDefault();
+        const currentRef = isFullscreen ? fullscreenScrollRef.current : scrollRef.current;
+        if (currentRef) {
+          const maxScroll = currentRef.scrollHeight - currentRef.clientHeight;
           setScrollPosition(prev => Math.min(maxScroll, prev + viewportPadding));
         }
       } else if (e.code === "ArrowLeft" && !e.repeat) {
