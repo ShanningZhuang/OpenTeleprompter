@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
 
 interface TeleprompterConfig {
   // Text settings
@@ -49,120 +50,161 @@ const eyeFriendlyColors = [
   { name: "Black on Yellow", text: "#000000", bg: "#ffff00" },
 ];
 
-const defaultContent = `Welcome to Your Professional Teleprompter
+const defaultContent = `# Welcome to Your Professional Teleprompter
 
-This is a demonstration of the teleprompter's smooth scrolling capabilities.
+This is a demonstration of the teleprompter's **smooth scrolling capabilities** with *full markdown support*.
 
-INTRODUCTION
+## INTRODUCTION
 
-Hello and welcome! Today, I'm excited to share with you an incredible tool designed to make your presentations, videos, and live streams more professional and engaging.
+Hello and welcome! Today, I'm **excited** to share with you an *incredible tool* designed to make your presentations, videos, and live streams more professional and engaging.
 
-Whether you're a content creator, public speaker, educator, or business professional, this teleprompter will help you deliver your message with confidence while maintaining eye contact with your audience or camera.
+Whether you're a content creator, public speaker, educator, or business professional, this teleprompter will help you deliver your message with **confidence** while maintaining eye contact with your audience or camera.
 
-KEY FEATURES
+## KEY FEATURES
 
-Let me walk you through some of the amazing features this teleprompter offers:
+Let me walk you through some of the **amazing features** this teleprompter offers:
 
-CUSTOMIZABLE TEXT SETTINGS
-You have complete control over how your text appears. Adjust the font size from small to extra large, modify line height for comfortable reading, and fine-tune letter spacing to match your preferences.
+### CUSTOMIZABLE TEXT SETTINGS
 
-Choose from eye-friendly color combinations that reduce strain during long recording sessions. Whether you prefer classic white on black, or high-contrast yellow on black, we've got you covered.
+You have **complete control** over how your text appears:
 
-FLEXIBLE DISPLAY OPTIONS
-Position your teleprompter panel exactly where you need it - full screen, top half, bottom half, or either side of your screen.
+- Adjust the font size from small to extra large
+- Modify line height for comfortable reading
+- Fine-tune letter spacing to match your preferences
 
-Enable mirror mode for use with physical teleprompter hardware. The horizontal flip feature is perfect for use with teleprompter glass, while vertical flip gives you additional flexibility for unique setups.
+Choose from *eye-friendly color combinations* that reduce strain during long recording sessions. Whether you prefer classic white on black, or high-contrast yellow on black, we've got you covered.
 
-Adjust margins on all four sides to create the perfect reading zone that matches your camera setup and personal preferences.
+### FLEXIBLE DISPLAY OPTIONS
 
-SMOOTH PLAYBACK CONTROL
-Start and stop scrolling with a simple click or press the spacebar for hands-free operation.
+Position your teleprompter panel exactly where you need it:
 
-Adjust the scroll speed in real-time to match your speaking pace. Whether you're a fast talker or prefer a slower, more deliberate delivery, you can fine-tune the speed from 0.1x to 5.0x.
+- **Full screen** mode for maximum visibility
+- Top half, bottom half, or either side of your screen
+- *Mirror mode* for use with physical teleprompter hardware
 
-The built-in timer helps you track your presentation length, ensuring you stay within your allotted time.
+Enable **horizontal flip** for use with teleprompter glass, while **vertical flip** gives you additional flexibility for unique setups.
 
-READING INDICATOR
-The customizable reading indicator line helps you maintain your place on screen. Position it anywhere from top to bottom to match your natural eye level.
+Adjust margins to create the perfect reading zone that matches your camera setup and personal preferences.
 
-Choose any color for your indicator to ensure it's visible against your chosen background and text colors.
+### SMOOTH PLAYBACK CONTROL
 
-FULLSCREEN MODE
-Press F or click the Fullscreen button to enter a distraction-free reading mode. Perfect for actual presentations and recordings.
+**Start and stop** scrolling with a simple click or press the **spacebar** for hands-free operation.
 
-All your controls remain easily accessible at the top of the screen, allowing you to adjust speed or pause without leaving fullscreen mode.
+Adjust the scroll speed in *real-time* to match your speaking pace. Whether you're a fast talker or prefer a slower, more deliberate delivery, you can fine-tune the speed from **0.1x to 3.0x**.
 
-Press F again or ESC to exit fullscreen and return to the settings panel.
+The built-in *timer* helps you track your presentation length, ensuring you stay within your allotted time.
 
-CONFIGURATION MANAGEMENT
-Found the perfect setup? Export your configuration to save all your settings in a JSON file.
+### READING INDICATOR
 
-Import your saved configuration anytime to instantly restore your preferred settings.
+The customizable reading indicator line helps you **maintain your place** on screen:
 
-Reset to defaults with a single click if you want to start fresh.
+- Position it anywhere from top to bottom to match your natural eye level
+- Choose any color for your indicator to ensure visibility
+- Indicator works independently from text position
 
-KEYBOARD SHORTCUTS
+### FULLSCREEN MODE
 
-For maximum efficiency, use these keyboard shortcuts:
+Press **F** or click the Fullscreen button to enter a *distraction-free* reading mode. Perfect for actual presentations and recordings.
 
-SPACEBAR - Play and pause scrolling
-F - Toggle fullscreen mode
-R - Reset scroll position to the beginning
+All your controls remain easily accessible:
 
-PRACTICAL APPLICATIONS
+- Adjust speed with **←** and **→** arrow keys
+- Press **C** to toggle control panel visibility
+- Press **S** to open settings sidebar
+- Press **F** again or **ESC** to exit fullscreen
 
-YOUTUBE VIDEOS
-Create professional videos without stumbling over your words. Maintain eye contact with the camera while reading your script naturally.
+### MARKDOWN SUPPORT
 
-LIVE STREAMING
-Engage with your audience while staying on message. Perfect for webinars, live shows, and virtual events.
+This teleprompter now supports **markdown formatting**! You can use:
 
-PRESENTATIONS
-Deliver confident presentations without relying on notes. Look at your audience while covering all your key points.
+- **Bold text** with \`**double asterisks**\`
+- *Italic text* with \`*single asterisks*\`
+- Headings with \`#\`, \`##\`, \`###\`
+- Bullet lists and numbered lists
+- And more!
 
-EDUCATIONAL CONTENT
-Teachers and instructors can create clear, well-organized lessons without losing their train of thought.
+### CONFIGURATION MANAGEMENT
 
-BUSINESS COMMUNICATIONS
-Record polished company announcements, training videos, and marketing messages with ease.
+Found the perfect setup?
 
-TIPS FOR SUCCESS
+1. **Export** your configuration to save all settings in a JSON file
+2. **Import** your saved configuration anytime to restore preferences
+3. **Reset** to defaults with a single click if you want to start fresh
+4. Settings are **automatically saved** to your browser's local storage
 
-Start with a slower speed and gradually increase as you become more comfortable reading from the teleprompter.
+### KEYBOARD SHORTCUTS
 
-Practice your script a few times to become familiar with the content. The teleprompter is a guide, not a replacement for preparation.
+For *maximum efficiency*, use these keyboard shortcuts:
 
-Adjust the reading indicator to match your natural eye level on the screen. This helps maintain a natural appearance on camera.
+- **Space** - Play and pause scrolling
+- **F** - Toggle fullscreen mode
+- **R** - Reset scroll position to the beginning
+- **↑ / ⌘ / ^** - Scroll up one page
+- **↓ / ⌥** - Scroll down one page
+- **←** - Decrease speed by 0.1x
+- **→** - Increase speed by 0.1x
+- **S** - Toggle settings sidebar (fullscreen)
+- **C** - Toggle control panel (fullscreen)
 
-Use natural pauses and inflection in your voice. Don't let the scrolling pace dictate your delivery - you control the speed.
+## PRACTICAL APPLICATIONS
 
-Experiment with different font sizes and colors to find what's most comfortable for your eyes, especially during long recording sessions.
+### YOUTUBE VIDEOS
+Create **professional videos** without stumbling over your words. Maintain *eye contact* with the camera while reading your script naturally.
 
-GETTING STARTED
+### LIVE STREAMING
+Engage with your audience while staying on message. Perfect for:
+- Webinars and online workshops
+- Live shows and virtual events
+- Q&A sessions with prepared talking points
 
-Ready to try it yourself? Simply paste your script into the content area, adjust the settings to your liking, and click play!
+### PRESENTATIONS
+Deliver **confident presentations** without relying on notes. Look at your audience while covering all your key points with *natural delivery*.
 
-Use the preview panel to see how your teleprompter will look before going fullscreen.
+### EDUCATIONAL CONTENT
+Teachers and instructors can create *clear, well-organized* lessons without losing their train of thought. Great for:
+- Recorded lectures
+- Tutorial videos
+- Online course content
 
-Fine-tune the speed and position until everything feels natural and comfortable.
+### BUSINESS COMMUNICATIONS
+Record polished company announcements, training videos, and marketing messages with **ease and professionalism**.
 
-Then enter fullscreen mode and deliver your best performance!
+## TIPS FOR SUCCESS
 
-CONCLUSION
+Here are some **pro tips** to get the most out of your teleprompter:
 
-Thank you for choosing this teleprompter application. Whether you're creating content, delivering presentations, or communicating with your audience, this tool is designed to help you perform at your best.
+1. **Start slow** - Begin with a slower speed and gradually increase as you become comfortable
+2. **Practice first** - Run through your script a few times. The teleprompter is a guide, not a replacement for preparation
+3. **Adjust indicator height** - Match it to your natural eye level for a natural appearance on camera
+4. **Control the pace** - Use natural pauses and inflection. *You* control the speed, not the other way around
+5. **Find your comfort** - Experiment with different font sizes and colors for long recording sessions
+6. **Use markdown** - Format important words with **bold** or *italic* to emphasize key points
 
-Remember, the key to great teleprompter use is practice. The more you use it, the more natural and confident you'll become.
+## GETTING STARTED
 
-Now it's your turn - paste your script, customize your settings, and start creating amazing content!
+Ready to try it yourself?
 
-Good luck with your presentations, videos, and live streams. You've got this!
+1. **Paste your script** into the content area (markdown supported!)
+2. **Adjust the settings** to your liking
+3. **Use the preview** panel to see how it looks
+4. **Fine-tune** the speed and position
+5. **Enter fullscreen** mode and deliver your best performance!
+
+## CONCLUSION
+
+Thank you for choosing this *professional teleprompter application*. Whether you're creating content, delivering presentations, or communicating with your audience, this tool is designed to help you **perform at your best**.
+
+Remember: The key to great teleprompter use is **practice**. The more you use it, the more natural and confident you'll become.
+
+Now it's your turn - paste your script, customize your settings, and start creating *amazing content*!
 
 ---
 
-This demonstration script is designed to showcase the teleprompter's capabilities. Replace this text with your own script to get started.
+This demonstration script showcases the teleprompter's capabilities with **markdown formatting**. Replace this text with your own script to get started.
 
-Happy recording! 🎬`;
+Happy recording! 🎬
+
+Good luck with your presentations, videos, and live streams. **You've got this!**`;
 
 export default function Home() {
   const [config, setConfig] = useState<TeleprompterConfig>(defaultConfig);
@@ -782,11 +824,10 @@ export default function Home() {
                     letterSpacing: `${config.letterSpacing}px`,
                     textAlign: config.textAlign,
                     color: config.textColor,
-                    whiteSpace: "pre-wrap",
-                    wordWrap: "break-word",
                   }}
+                  className="markdown-content"
                 >
-                  {content}
+                  <ReactMarkdown>{content}</ReactMarkdown>
                 </div>
               </div>
             </div>
@@ -1090,11 +1131,10 @@ export default function Home() {
                   letterSpacing: `${config.letterSpacing}px`,
                   textAlign: config.textAlign,
                   color: config.textColor,
-                  whiteSpace: "pre-wrap",
-                  wordWrap: "break-word",
                 }}
+                className="markdown-content"
               >
-                {content}
+                <ReactMarkdown>{content}</ReactMarkdown>
               </div>
             </div>
           </div>
