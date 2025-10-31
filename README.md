@@ -42,8 +42,8 @@ A professional teleprompter application for speakers, presenters, and video crea
 - **R** - Reset scroll position
 - **S** - Toggle Settings Sidebar (in fullscreen mode)
 - **C** - Toggle Control Panel (in fullscreen mode)
-- **↑ Arrow Up** - Scroll up manually
-- **↓ Arrow Down** - Scroll down manually
+- **↑ Arrow Up** - Scroll up one page
+- **↓ Arrow Down** - Scroll down one page
 - **← Arrow Left** - Decrease speed by 0.1x
 - **→ Arrow Right** - Increase speed by 0.1x
 

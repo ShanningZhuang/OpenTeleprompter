@@ -352,15 +352,18 @@ export default function Home() {
         setControlsVisible(prev => !prev);
       } else if (e.code === "ArrowUp" && !e.repeat) {
         e.preventDefault();
-        const scrollAmount = 50; // pixels to scroll
-        setScrollPosition(prev => Math.max(0, prev - scrollAmount));
-      } else if (e.code === "ArrowDown" && !e.repeat) {
-        e.preventDefault();
-        const scrollAmount = 50;
         const currentRef = isFullscreen ? fullscreenScrollRef.current : scrollRef.current;
         if (currentRef) {
+          const pageHeight = currentRef.clientHeight; // one viewport/page
+          setScrollPosition(prev => Math.max(0, prev - pageHeight));
+        }
+      } else if (e.code === "ArrowDown" && !e.repeat) {
+        e.preventDefault();
+        const currentRef = isFullscreen ? fullscreenScrollRef.current : scrollRef.current;
+        if (currentRef) {
+          const pageHeight = currentRef.clientHeight; // one viewport/page
           const maxScroll = currentRef.scrollHeight - currentRef.clientHeight;
-          setScrollPosition(prev => Math.min(maxScroll, prev + scrollAmount));
+          setScrollPosition(prev => Math.min(maxScroll, prev + pageHeight));
         }
       } else if (e.code === "ArrowLeft" && !e.repeat) {
         e.preventDefault();
