@@ -15,10 +15,9 @@ interface TeleprompterConfig {
   panelPosition: "top" | "bottom" | "left" | "right" | "full";
   mirrorHorizontal: boolean;
   mirrorVertical: boolean;
-  marginTop: number;
-  marginBottom: number;
-  marginLeft: number;
-  marginRight: number;
+  marginTop: number; // percentage
+  marginBottom: number; // percentage
+  marginHorizontal: number; // percentage (left and right combined)
 
   // Playback settings
   speed: number;
@@ -38,10 +37,9 @@ const defaultConfig: TeleprompterConfig = {
   panelPosition: "full",
   mirrorHorizontal: false,
   mirrorVertical: false,
-  marginTop: 100,
-  marginBottom: 100,
-  marginLeft: 100,
-  marginRight: 100,
+  marginTop: 10, // 10%
+  marginBottom: 10, // 10%
+  marginHorizontal: 5, // 5%
   speed: 1.0,
   indicatorPosition: 50,
   indicatorColor: "#ff0000",
@@ -245,12 +243,16 @@ export default function Home() {
   // Calculate padding to align first line with indicator
   useEffect(() => {
     if (scrollRef.current) {
-      const indicatorPixels = (config.indicatorPosition / 100) * scrollRef.current.clientHeight;
-      setPreviewPaddingTop(config.marginTop + indicatorPixels);
+      const containerHeight = scrollRef.current.clientHeight;
+      const marginTopPixels = (config.marginTop / 100) * containerHeight;
+      const indicatorPixels = (config.indicatorPosition / 100) * containerHeight;
+      setPreviewPaddingTop(marginTopPixels + indicatorPixels);
     }
     if (fullscreenScrollRef.current) {
-      const indicatorPixels = (config.indicatorPosition / 100) * fullscreenScrollRef.current.clientHeight;
-      setFullscreenPaddingTop(config.marginTop + indicatorPixels);
+      const containerHeight = fullscreenScrollRef.current.clientHeight;
+      const marginTopPixels = (config.marginTop / 100) * containerHeight;
+      const indicatorPixels = (config.indicatorPosition / 100) * containerHeight;
+      setFullscreenPaddingTop(marginTopPixels + indicatorPixels);
     }
   }, [config.indicatorPosition, config.marginTop, isFullscreen]);
 
@@ -392,18 +394,17 @@ export default function Home() {
             {isFullscreen ? "⛶ Exit Fullscreen" : "⛶ Fullscreen"}
           </button>
           <div className="text-lg font-mono">{formatTime(elapsedTime)}</div>
-          <div className="flex items-center gap-2">
-            <label className="text-sm">Speed:</label>
+          <div className="flex items-center gap-3 min-w-[200px]">
+            <label className="text-sm whitespace-nowrap">Speed: {config.speed.toFixed(1)}x</label>
             <input
-              type="number"
+              type="range"
               value={config.speed}
-              onChange={(e) => updateConfig({ speed: parseFloat(e.target.value) || 1 })}
+              onChange={(e) => updateConfig({ speed: parseFloat(e.target.value) })}
               step="0.1"
-              min="0.1"
-              max="5"
-              className="bg-[#2a2a2a] px-3 py-1 rounded w-20 text-center"
+              min="0"
+              max="3"
+              className="flex-1"
             />
-            <span className="text-sm">x</span>
           </div>
         </div>
         <div className="text-xs text-gray-400 text-center mt-2">
@@ -569,41 +570,38 @@ export default function Home() {
 
             <div>
               <label className="text-sm block mb-2">Margins</label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-3">
                 <div>
-                  <label className="text-xs block mb-1">↑ Top: {config.marginTop}px</label>
+                  <label className="text-sm block mb-1">↑ Top: {config.marginTop}%</label>
                   <input
-                    type="number"
+                    type="range"
+                    min="0"
+                    max="30"
                     value={config.marginTop}
-                    onChange={(e) => updateConfig({ marginTop: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#2a2a2a] px-2 py-1 rounded text-sm"
+                    onChange={(e) => updateConfig({ marginTop: parseInt(e.target.value) })}
+                    className="w-full"
                   />
                 </div>
                 <div>
-                  <label className="text-xs block mb-1">↓ Bottom: {config.marginBottom}px</label>
+                  <label className="text-sm block mb-1">↓ Bottom: {config.marginBottom}%</label>
                   <input
-                    type="number"
+                    type="range"
+                    min="0"
+                    max="30"
                     value={config.marginBottom}
-                    onChange={(e) => updateConfig({ marginBottom: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#2a2a2a] px-2 py-1 rounded text-sm"
+                    onChange={(e) => updateConfig({ marginBottom: parseInt(e.target.value) })}
+                    className="w-full"
                   />
                 </div>
                 <div>
-                  <label className="text-xs block mb-1">← Left: {config.marginLeft}px</label>
+                  <label className="text-sm block mb-1">↔ Horizontal: {config.marginHorizontal}%</label>
                   <input
-                    type="number"
-                    value={config.marginLeft}
-                    onChange={(e) => updateConfig({ marginLeft: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#2a2a2a] px-2 py-1 rounded text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs block mb-1">→ Right: {config.marginRight}px</label>
-                  <input
-                    type="number"
-                    value={config.marginRight}
-                    onChange={(e) => updateConfig({ marginRight: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#2a2a2a] px-2 py-1 rounded text-sm"
+                    type="range"
+                    min="0"
+                    max="30"
+                    value={config.marginHorizontal}
+                    onChange={(e) => updateConfig({ marginHorizontal: parseInt(e.target.value) })}
+                    className="w-full"
                   />
                 </div>
               </div>
@@ -709,10 +707,10 @@ export default function Home() {
               ref={scrollRef}
               className="h-full overflow-y-scroll"
               style={{
-                paddingTop: previewPaddingTop || config.marginTop,
-                paddingBottom: config.marginBottom,
-                paddingLeft: config.marginLeft,
-                paddingRight: config.marginRight,
+                paddingTop: previewPaddingTop || `${config.marginTop}%`,
+                paddingBottom: `${config.marginBottom}%`,
+                paddingLeft: `${config.marginHorizontal}%`,
+                paddingRight: `${config.marginHorizontal}%`,
                 transform: `${config.mirrorHorizontal ? "scaleX(-1)" : ""} ${config.mirrorVertical ? "scaleY(-1)" : ""}`,
                 scrollbarWidth: "none",
                 msOverflowStyle: "none",
@@ -776,18 +774,17 @@ export default function Home() {
             ⛶ Exit
           </button>
           <div className="text-lg font-mono text-white">{formatTime(elapsedTime)}</div>
-          <div className="flex items-center gap-2 text-white">
-            <label className="text-sm">Speed:</label>
+          <div className="flex items-center gap-3 text-white min-w-[200px]">
+            <label className="text-sm whitespace-nowrap">Speed: {config.speed.toFixed(1)}x</label>
             <input
-              type="number"
+              type="range"
               value={config.speed}
-              onChange={(e) => updateConfig({ speed: parseFloat(e.target.value) || 1 })}
+              onChange={(e) => updateConfig({ speed: parseFloat(e.target.value) })}
               step="0.1"
-              min="0.1"
-              max="5"
-              className="bg-[#2a2a2a] px-3 py-1 rounded w-20 text-center text-white"
+              min="0"
+              max="3"
+              className="flex-1"
             />
-            <span className="text-sm">x</span>
           </div>
         </div>
 
@@ -919,41 +916,38 @@ export default function Home() {
             {/* Margins */}
             <div className="mb-4">
               <label className="text-sm text-white block mb-2">Margins</label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-3">
                 <div>
-                  <label className="text-xs text-gray-400 block mb-1">Top: {config.marginTop}px</label>
+                  <label className="text-sm text-gray-300 block mb-1">Top: {config.marginTop}%</label>
                   <input
-                    type="number"
+                    type="range"
+                    min="0"
+                    max="30"
                     value={config.marginTop}
-                    onChange={(e) => updateConfig({ marginTop: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#2a2a2a] text-white px-2 py-1 rounded text-sm"
+                    onChange={(e) => updateConfig({ marginTop: parseInt(e.target.value) })}
+                    className="w-full"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 block mb-1">Bottom: {config.marginBottom}px</label>
+                  <label className="text-sm text-gray-300 block mb-1">Bottom: {config.marginBottom}%</label>
                   <input
-                    type="number"
+                    type="range"
+                    min="0"
+                    max="30"
                     value={config.marginBottom}
-                    onChange={(e) => updateConfig({ marginBottom: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#2a2a2a] text-white px-2 py-1 rounded text-sm"
+                    onChange={(e) => updateConfig({ marginBottom: parseInt(e.target.value) })}
+                    className="w-full"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 block mb-1">Left: {config.marginLeft}px</label>
+                  <label className="text-sm text-gray-300 block mb-1">Horizontal: {config.marginHorizontal}%</label>
                   <input
-                    type="number"
-                    value={config.marginLeft}
-                    onChange={(e) => updateConfig({ marginLeft: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#2a2a2a] text-white px-2 py-1 rounded text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs text-gray-400 block mb-1">Right: {config.marginRight}px</label>
-                  <input
-                    type="number"
-                    value={config.marginRight}
-                    onChange={(e) => updateConfig({ marginRight: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-[#2a2a2a] text-white px-2 py-1 rounded text-sm"
+                    type="range"
+                    min="0"
+                    max="30"
+                    value={config.marginHorizontal}
+                    onChange={(e) => updateConfig({ marginHorizontal: parseInt(e.target.value) })}
+                    className="w-full"
                   />
                 </div>
               </div>
@@ -1026,10 +1020,10 @@ export default function Home() {
             ref={fullscreenScrollRef}
             className="h-full overflow-y-scroll"
             style={{
-              paddingTop: fullscreenPaddingTop || config.marginTop,
-              paddingBottom: config.marginBottom,
-              paddingLeft: config.marginLeft,
-              paddingRight: config.marginRight,
+              paddingTop: fullscreenPaddingTop || `${config.marginTop}%`,
+              paddingBottom: `${config.marginBottom}%`,
+              paddingLeft: `${config.marginHorizontal}%`,
+              paddingRight: `${config.marginHorizontal}%`,
               transform: `${config.mirrorHorizontal ? "scaleX(-1)" : ""} ${config.mirrorVertical ? "scaleY(-1)" : ""}`,
               scrollbarWidth: "none",
               msOverflowStyle: "none",
