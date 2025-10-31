@@ -182,6 +182,34 @@ export default function Home() {
   const fullscreenRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const savedConfig = localStorage.getItem('teleprompterConfig');
+    const savedContent = localStorage.getItem('teleprompterContent');
+
+    if (savedConfig) {
+      try {
+        setConfig(JSON.parse(savedConfig));
+      } catch (e) {
+        console.error('Failed to load config from localStorage:', e);
+      }
+    }
+
+    if (savedContent) {
+      setContent(savedContent);
+    }
+  }, []);
+
+  // Save config to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('teleprompterConfig', JSON.stringify(config));
+  }, [config]);
+
+  // Save content to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('teleprompterContent', content);
+  }, [content]);
+
   // Handle scrolling
   useEffect(() => {
     if (isPlaying) {
