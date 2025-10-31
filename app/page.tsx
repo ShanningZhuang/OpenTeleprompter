@@ -362,6 +362,20 @@ export default function Home() {
           const maxScroll = currentRef.scrollHeight - currentRef.clientHeight;
           setScrollPosition(prev => Math.min(maxScroll, prev + scrollAmount));
         }
+      } else if (e.code === "ArrowLeft" && !e.repeat) {
+        e.preventDefault();
+        const speedDecrement = 0.1;
+        setConfig(prev => ({
+          ...prev,
+          speed: Math.max(0, parseFloat((prev.speed - speedDecrement).toFixed(1)))
+        }));
+      } else if (e.code === "ArrowRight" && !e.repeat) {
+        e.preventDefault();
+        const speedIncrement = 0.1;
+        setConfig(prev => ({
+          ...prev,
+          speed: Math.min(3, parseFloat((prev.speed + speedIncrement).toFixed(1)))
+        }));
       }
     };
     window.addEventListener("keydown", handleKeyPress);
@@ -407,7 +421,7 @@ export default function Home() {
           </div>
         </div>
         <div className="text-xs text-gray-400 text-center mt-2">
-          Keyboard: Space = Play/Pause | F = Fullscreen | R = Reset | S = Settings | C = Controls | ↑↓ = Scroll
+          Keyboard: Space = Play/Pause | F = Fullscreen | R = Reset | S = Settings | C = Controls | ↑↓ = Scroll | ←→ = Speed
         </div>
       </div>
 

@@ -44,6 +44,8 @@ A professional teleprompter application for speakers, presenters, and video crea
 - **C** - Toggle Control Panel (in fullscreen mode)
 - **↑ Arrow Up** - Scroll up manually
 - **↓ Arrow Down** - Scroll down manually
+- **← Arrow Left** - Decrease speed by 0.1x
+- **→ Arrow Right** - Increase speed by 0.1x
 
 ## Getting Started
 
