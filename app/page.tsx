@@ -757,7 +757,7 @@ export default function Home() {
 
         {/* Fullscreen Controls */}
         <div
-          className={`bg-black/80 p-4 flex items-center justify-center gap-4 transition-transform duration-300 ${
+          className={`absolute top-0 left-0 right-0 z-40 bg-black/80 p-4 flex items-center justify-center gap-4 transition-transform duration-300 ${
             controlsVisible ? "translate-y-0" : "-translate-y-full"
           }`}
         >
@@ -1017,7 +1017,7 @@ export default function Home() {
         </div>
 
         {/* Fullscreen Content */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
           {/* Reading Indicator */}
           <div
             className="absolute left-0 right-0 h-1 z-10 pointer-events-none"
