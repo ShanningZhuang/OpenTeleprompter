@@ -763,7 +763,7 @@ export default function Home() {
         {/* Toggle Controls Button (always visible) */}
         <button
           onClick={() => setControlsVisible(!controlsVisible)}
-          className="absolute top-2 left-2 z-50 bg-black/60 hover:bg-black/80 text-white px-3 py-2 rounded-lg transition-colors text-sm"
+          className="absolute top-2 right-2 z-50 bg-black/60 hover:bg-black/80 text-white px-3 py-2 rounded-lg transition-colors text-sm"
           title="Toggle controls (C key)"
         >
           {controlsVisible ? "▲ Hide" : "▼ Show"}
