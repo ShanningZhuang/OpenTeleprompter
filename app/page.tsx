@@ -15,8 +15,6 @@ interface TeleprompterConfig {
   panelPosition: "top" | "bottom" | "left" | "right" | "full";
   mirrorHorizontal: boolean;
   mirrorVertical: boolean;
-  marginTop: number; // percentage
-  marginBottom: number; // percentage
   marginHorizontal: number; // percentage (left and right combined)
 
   // Playback settings
@@ -37,8 +35,6 @@ const defaultConfig: TeleprompterConfig = {
   panelPosition: "full",
   mirrorHorizontal: false,
   mirrorVertical: false,
-  marginTop: 10, // 10%
-  marginBottom: 10, // 10%
   marginHorizontal: 5, // 5%
   speed: 1.0,
   indicatorPosition: 50,
@@ -181,6 +177,7 @@ export default function Home() {
   const fullscreenScrollRef = useRef<HTMLDivElement>(null);
   const fullscreenRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [viewportPadding, setViewportPadding] = useState(600); // Start with reasonable default
 
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -209,6 +206,34 @@ export default function Home() {
   useEffect(() => {
     localStorage.setItem('teleprompterContent', content);
   }, [content]);
+
+  // Calculate viewport padding (1 page worth of space at top and bottom)
+  useEffect(() => {
+    const updatePadding = () => {
+      if (isFullscreen) {
+        // In fullscreen, use the full window height
+        setViewportPadding(window.innerHeight);
+      } else {
+        // In preview mode, use the container's parent height
+        const currentRef = scrollRef.current;
+        if (currentRef && currentRef.parentElement) {
+          const containerHeight = currentRef.parentElement.clientHeight;
+          if (containerHeight > 0) {
+            setViewportPadding(containerHeight);
+          }
+        }
+      }
+    };
+
+    // Initial update with slight delay to ensure DOM is ready
+    const timer = setTimeout(updatePadding, 100);
+
+    window.addEventListener('resize', updatePadding);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updatePadding);
+    };
+  }, [isFullscreen]);
 
   // Handle scrolling
   useEffect(() => {
@@ -380,18 +405,15 @@ export default function Home() {
         setControlsVisible(prev => !prev);
       } else if (e.code === "ArrowUp" && !e.repeat) {
         e.preventDefault();
-        const currentRef = isFullscreen ? fullscreenScrollRef.current : scrollRef.current;
-        if (currentRef) {
-          const pageHeight = currentRef.clientHeight; // one viewport/page
-          setScrollPosition(prev => Math.max(0, prev - pageHeight));
-        }
+        // Use viewportPadding which represents the actual page/viewport size
+        setScrollPosition(prev => Math.max(0, prev - viewportPadding));
       } else if (e.code === "ArrowDown" && !e.repeat) {
         e.preventDefault();
         const currentRef = isFullscreen ? fullscreenScrollRef.current : scrollRef.current;
         if (currentRef) {
-          const pageHeight = currentRef.clientHeight; // one viewport/page
           const maxScroll = currentRef.scrollHeight - currentRef.clientHeight;
-          setScrollPosition(prev => Math.min(maxScroll, prev + pageHeight));
+          // Use viewportPadding which represents the actual page/viewport size
+          setScrollPosition(prev => Math.min(maxScroll, prev + viewportPadding));
         }
       } else if (e.code === "ArrowLeft" && !e.repeat) {
         e.preventDefault();
@@ -613,41 +635,18 @@ export default function Home() {
             </div>
 
             <div>
-              <label className="text-sm block mb-2">Margins</label>
-              <div className="space-y-3">
-                <div>
-                  <label className="text-sm block mb-1">↑ Top: {config.marginTop}%</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="30"
-                    value={config.marginTop}
-                    onChange={(e) => updateConfig({ marginTop: parseInt(e.target.value) })}
-                    className="w-full"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm block mb-1">↓ Bottom: {config.marginBottom}%</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="30"
-                    value={config.marginBottom}
-                    onChange={(e) => updateConfig({ marginBottom: parseInt(e.target.value) })}
-                    className="w-full"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm block mb-1">↔ Horizontal: {config.marginHorizontal}%</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="30"
-                    value={config.marginHorizontal}
-                    onChange={(e) => updateConfig({ marginHorizontal: parseInt(e.target.value) })}
-                    className="w-full"
-                  />
-                </div>
+              <label className="text-sm block mb-2">Horizontal Margin</label>
+              <div>
+                <label className="text-sm block mb-1">↔ Horizontal: {config.marginHorizontal}%</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="30"
+                  value={config.marginHorizontal}
+                  onChange={(e) => updateConfig({ marginHorizontal: parseInt(e.target.value) })}
+                  className="w-full"
+                  aria-label="Horizontal Margin"
+                />
               </div>
             </div>
           </div>
@@ -751,8 +750,6 @@ export default function Home() {
               ref={scrollRef}
               className="h-full overflow-y-scroll"
               style={{
-                paddingTop: `${config.marginTop}%`,
-                paddingBottom: `${config.marginBottom}%`,
                 paddingLeft: `${config.marginHorizontal}%`,
                 paddingRight: `${config.marginHorizontal}%`,
                 transform: `${config.mirrorHorizontal ? "scaleX(-1)" : ""} ${config.mirrorVertical ? "scaleY(-1)" : ""}`,
@@ -762,16 +759,23 @@ export default function Home() {
             >
               <div
                 style={{
-                  fontSize: `${config.fontSize}px`,
-                  lineHeight: config.lineHeight,
-                  letterSpacing: `${config.letterSpacing}px`,
-                  textAlign: config.textAlign,
-                  color: config.textColor,
-                  whiteSpace: "pre-wrap",
-                  wordWrap: "break-word",
+                  paddingTop: `${viewportPadding}px`,
+                  paddingBottom: `${viewportPadding}px`,
                 }}
               >
-                {content}
+                <div
+                  style={{
+                    fontSize: `${config.fontSize}px`,
+                    lineHeight: config.lineHeight,
+                    letterSpacing: `${config.letterSpacing}px`,
+                    textAlign: config.textAlign,
+                    color: config.textColor,
+                    whiteSpace: "pre-wrap",
+                    wordWrap: "break-word",
+                  }}
+                >
+                  {content}
+                </div>
               </div>
             </div>
           </div>
@@ -970,43 +974,20 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Margins */}
+            {/* Horizontal Margin */}
             <div className="mb-4">
-              <label className="text-sm text-white block mb-2">Margins</label>
-              <div className="space-y-3">
-                <div>
-                  <label className="text-sm text-gray-300 block mb-1">Top: {config.marginTop}%</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="30"
-                    value={config.marginTop}
-                    onChange={(e) => updateConfig({ marginTop: parseInt(e.target.value) })}
-                    className="w-full"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-300 block mb-1">Bottom: {config.marginBottom}%</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="30"
-                    value={config.marginBottom}
-                    onChange={(e) => updateConfig({ marginBottom: parseInt(e.target.value) })}
-                    className="w-full"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-300 block mb-1">Horizontal: {config.marginHorizontal}%</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="30"
-                    value={config.marginHorizontal}
-                    onChange={(e) => updateConfig({ marginHorizontal: parseInt(e.target.value) })}
-                    className="w-full"
-                  />
-                </div>
+              <label className="text-sm text-white block mb-2">Horizontal Margin</label>
+              <div>
+                <label className="text-sm text-gray-300 block mb-1">Horizontal: {config.marginHorizontal}%</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="30"
+                  value={config.marginHorizontal}
+                  onChange={(e) => updateConfig({ marginHorizontal: parseInt(e.target.value) })}
+                  className="w-full"
+                  aria-label="Horizontal Margin"
+                />
               </div>
             </div>
 
@@ -1077,8 +1058,6 @@ export default function Home() {
             ref={fullscreenScrollRef}
             className="h-full overflow-y-scroll"
             style={{
-              paddingTop: `${config.marginTop}%`,
-              paddingBottom: `${config.marginBottom}%`,
               paddingLeft: `${config.marginHorizontal}%`,
               paddingRight: `${config.marginHorizontal}%`,
               transform: `${config.mirrorHorizontal ? "scaleX(-1)" : ""} ${config.mirrorVertical ? "scaleY(-1)" : ""}`,
@@ -1088,16 +1067,23 @@ export default function Home() {
           >
             <div
               style={{
-                fontSize: `${config.fontSize}px`,
-                lineHeight: config.lineHeight,
-                letterSpacing: `${config.letterSpacing}px`,
-                textAlign: config.textAlign,
-                color: config.textColor,
-                whiteSpace: "pre-wrap",
-                wordWrap: "break-word",
+                paddingTop: `${viewportPadding}px`,
+                paddingBottom: `${viewportPadding}px`,
               }}
             >
-              {content}
+              <div
+                style={{
+                  fontSize: `${config.fontSize}px`,
+                  lineHeight: config.lineHeight,
+                  letterSpacing: `${config.letterSpacing}px`,
+                  textAlign: config.textAlign,
+                  color: config.textColor,
+                  whiteSpace: "pre-wrap",
+                  wordWrap: "break-word",
+                }}
+              >
+                {content}
+              </div>
             </div>
           </div>
         </div>
