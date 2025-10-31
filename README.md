@@ -23,6 +23,8 @@ A professional teleprompter application for speakers, presenters, and video crea
 - Adjustable scroll speed (0.1x - 5.0x)
 - Built-in timer
 - Reset function
+- **Fullscreen mode** for distraction-free reading
+- **Collapsible settings sidebar** in fullscreen mode for on-the-fly adjustments
 
 ### Reading Indicator
 - Customizable position (0-100% from top)
@@ -33,6 +35,12 @@ A professional teleprompter application for speakers, presenters, and video crea
 - Export settings to JSON file
 - Import previously saved configurations
 - Reset to default settings
+
+### Keyboard Shortcuts
+- **Space** - Play/Pause
+- **F** - Toggle Fullscreen
+- **R** - Reset scroll position
+- **S** - Toggle Settings Sidebar (in fullscreen mode)
 
 ## Getting Started
 
@@ -82,9 +90,18 @@ vercel
    - Set your preferred panel position
    - Configure margins and mirror mode if needed
    - Position the reading indicator
-3. **Click Play** to start scrolling
-4. **Adjust speed** in real-time as needed
-5. **Export your configuration** to save your preferences for future use
+3. **Click Play** to start scrolling (or press **Space**)
+4. **Click Fullscreen** to enter fullscreen mode (or press **F**)
+5. **Adjust speed** in real-time as needed
+6. **Export your configuration** to save your preferences for future use
+
+### Tips for Best Results
+- Use fullscreen mode for distraction-free reading
+- Click "Settings" or press **S** in fullscreen to access the sidebar for quick adjustments
+- Adjust the reading indicator to match your eye level on screen
+- Start with a slower speed and gradually increase
+- Use keyboard shortcuts for quick control during presentations
+- The sidebar in fullscreen mode lets you change font size, colors, margins, and more without exiting
 
 ## Technologies Used
 
