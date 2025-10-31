@@ -176,8 +176,6 @@ export default function Home() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [previewPaddingTop, setPreviewPaddingTop] = useState(0);
-  const [fullscreenPaddingTop, setFullscreenPaddingTop] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fullscreenScrollRef = useRef<HTMLDivElement>(null);
   const fullscreenRef = useRef<HTMLDivElement>(null);
@@ -240,21 +238,6 @@ export default function Home() {
     };
   }, [isPlaying]);
 
-  // Calculate padding to align first line with indicator
-  useEffect(() => {
-    if (scrollRef.current) {
-      const containerHeight = scrollRef.current.clientHeight;
-      const marginTopPixels = (config.marginTop / 100) * containerHeight;
-      const indicatorPixels = (config.indicatorPosition / 100) * containerHeight;
-      setPreviewPaddingTop(marginTopPixels + indicatorPixels);
-    }
-    if (fullscreenScrollRef.current) {
-      const containerHeight = fullscreenScrollRef.current.clientHeight;
-      const marginTopPixels = (config.marginTop / 100) * containerHeight;
-      const indicatorPixels = (config.indicatorPosition / 100) * containerHeight;
-      setFullscreenPaddingTop(marginTopPixels + indicatorPixels);
-    }
-  }, [config.indicatorPosition, config.marginTop, isFullscreen]);
 
   // Timer
   useEffect(() => {
@@ -707,7 +690,7 @@ export default function Home() {
               ref={scrollRef}
               className="h-full overflow-y-scroll"
               style={{
-                paddingTop: previewPaddingTop || `${config.marginTop}%`,
+                paddingTop: `${config.marginTop}%`,
                 paddingBottom: `${config.marginBottom}%`,
                 paddingLeft: `${config.marginHorizontal}%`,
                 paddingRight: `${config.marginHorizontal}%`,
@@ -1020,7 +1003,7 @@ export default function Home() {
             ref={fullscreenScrollRef}
             className="h-full overflow-y-scroll"
             style={{
-              paddingTop: fullscreenPaddingTop || `${config.marginTop}%`,
+              paddingTop: `${config.marginTop}%`,
               paddingBottom: `${config.marginBottom}%`,
               paddingLeft: `${config.marginHorizontal}%`,
               paddingRight: `${config.marginHorizontal}%`,
