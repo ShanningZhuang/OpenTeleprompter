@@ -1,6 +1,12 @@
-# Teleprompter App
+# OpenTeleprompter
 
 A professional teleprompter application for speakers, presenters, and video creators. Read your scripts while maintaining eye contact with your camera or audience.
+
+🌐 **Live App**: [https://openteleprompter.vercel.app/](https://openteleprompter.vercel.app/)
+
+📦 **GitHub Repository**: [https://github.com/ShanningZhuang/OpenTeleprompter](https://github.com/ShanningZhuang/OpenTeleprompter)
+
+👤 **Created by**: [Shanning Zhuang](https://shanningzhuang.com/)
 
 ## Features
 
@@ -32,9 +38,11 @@ A professional teleprompter application for speakers, presenters, and video crea
 - Helps track reading progress
 
 ### Configuration Management
+- **Auto-save** - Settings automatically saved to browser localStorage
 - Export settings to JSON file
 - Import previously saved configurations
 - Reset to default settings
+- Persist across page refreshes
 
 ### Keyboard Shortcuts
 - **Space** - Play/Pause
@@ -42,10 +50,17 @@ A professional teleprompter application for speakers, presenters, and video crea
 - **R** - Reset scroll position
 - **S** - Toggle Settings Sidebar (in fullscreen mode)
 - **C** - Toggle Control Panel (in fullscreen mode)
-- **↑ Arrow Up** - Scroll up one page
-- **↓ Arrow Down** - Scroll down one page
-- **← Arrow Left** - Decrease speed by 0.1x
-- **→ Arrow Right** - Increase speed by 0.1x
+- **↑ / ⌘ / ^** - Scroll up one page (Arrow Up / Command / Control)
+- **↓ / ⌥** - Scroll down one page (Arrow Down / Option)
+- **←** - Decrease speed by 0.1x
+- **→** - Increase speed by 0.1x
+
+### Markdown Support
+- **Bold text** with `**double asterisks**`
+- *Italic text* with `*single asterisks*`
+- Headings with `#`, `##`, `###`
+- Bullet lists and numbered lists
+- And more standard markdown features
 
 ## Getting Started
 

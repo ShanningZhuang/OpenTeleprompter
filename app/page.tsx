@@ -492,6 +492,39 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
+      {/* Header */}
+      <div className="mb-4 text-center">
+        <h1 className="text-2xl font-bold mb-2">OpenTeleprompter</h1>
+        <div className="flex items-center justify-center gap-4 text-sm text-gray-400">
+          <a
+            href="https://openteleprompter.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors"
+          >
+            🌐 Live App
+          </a>
+          <span>•</span>
+          <a
+            href="https://github.com/ShanningZhuang/OpenTeleprompter"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors"
+          >
+            📦 GitHub
+          </a>
+          <span>•</span>
+          <a
+            href="https://shanningzhuang.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors"
+          >
+            👤 Shanning Zhuang
+          </a>
+        </div>
+      </div>
+
       {/* Control Bar */}
       <div className="mb-6 bg-[#1a1a1a] rounded-lg p-4 border border-gray-800">
         <div className="flex items-center justify-center gap-4 flex-wrap">
